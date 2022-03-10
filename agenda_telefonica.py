@@ -4,7 +4,7 @@ while True:
     print('CADASTRAR - (1)\nLISTAR - (2)\nSAIR - (3)')
     opt = input('Digite a opção: ')
 
-    if opt[0] == '1' or opt in 'cadastro':
+    if opt[0] == '1' or opt[2] in 'cadastro':
         print('\nOpção 1 rodando...')
         text = 'CADASTRO'
         frm = len(text)+6
@@ -16,7 +16,7 @@ while True:
         lista_telefonica.append(number)
         lista_nome.append(nome)
         print('\n')
-    elif opt[0] == '2' or opt in 'listar':
+    elif opt[0] == '2' or opt[2] in 'listar':
         print('\nOpção 2 rodando')
         print('\n')
         text = 'LISTA TELEFONICA'
@@ -30,7 +30,10 @@ while True:
         print('='*frm)
         print('\n')
 
-    elif opt[0] == '3' or opt in 'sair':
+    elif opt[0] == '3' or opt[2] in 'sair':
         print('\nOpção 3 rodando')
         print('\nPrograma frinalizado')
         break
+    else:
+        print('OPÇÃO INVÁLIDA!!!\n')
+        print('Tente novamente...')
