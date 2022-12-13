@@ -98,27 +98,62 @@ def deletar(sql, value):
         cursor.execute(sql, value)
         banco.commit()
 
-def atualizar(dados_atuais, colunas):
+def atualizar(sql1, sql2, option):
+        cursor.execute(sql1)
+        resultado = cursor.fetchall()
+        dados_atuais = list()
+        for i in range(1, len(resultado[0])):
+            dados_atuais.append(resultado[0][i])
 
-    id = int(input('Digite o id da mae que deseja alterar: '))
+        cursor.execute(sql2)
+        resultado = cursor.fetchall()
+        colunas = list()
+        for j in range(len(resultado)):
+            colunas.append(resultado[j][0])
+        
+        comando = 'UPDATE '
 
-    result = list()
-    for i in range(0, len(dados_atuais)):
-        if id == dados_atuais[i][0]:
-            result = dados_atuais[i]
-    print(result)
+        if option == 1:
+            tabela = 'bebes '
+        elif option == 2:
+            tabela = 'maes '
+        elif option == 3:
+            tabela = 'medicos '
+        else:
+            tabela = 'especialidades '
+        sql = comando+tabela+'SET '
 
-    dados_novos = {"nome":input('Digite o nome: ').split(),
-            "endereco":input('Digite o endereço: ').split(),
-            "telefone":input('Digite o telefone: ').split(),
-            "data_nascimento":input('Digite a data de nascimento(ano-mes-dia): ').split()
-            }
+        linhas = list()
+        for k in range(1, len(resultado)):
+            linhas.append(resultado[k][0])
+        print(linhas)
+        print(dados_atuais)
 
-    index = 1
-    for i in dados_novos:
-        if dados_novos[i] == '':
-            dados_novos[i] = result[index]
-        index+=1
+        dados_novos = list()
+        for m in range(len(linhas)):
+            dados_novos.append(input(f'Digite {linhas[m]}: '))
+            if dados_novos[m] == '':
+                dados_novos[m] = dados_atuais[m]
+        print(dados_novos)
+
+        for l in range(len(linhas)):
+            if dados_novos[l] in "datetime.date(":
+                dados_novos[l] = 
+            elif l < len(linhas)-1:
+                sql = sql + linhas[l]
+                sql = sql + '='
+                sql = sql + dados_novos[l]
+                sql = sql + ', '
+            else:
+                sql = sql + linhas[l]
+                sql = sql + '='
+                sql = sql + dados_novos[l]
+                sql = sql + ' '
+        sql = sql + 'WHERE id=' + id
+        print(sql)
+        
+
+
 
 
 while True:
@@ -132,29 +167,21 @@ while True:
     elif option == 2:
         print('[1] Bebe\n[2] Mae\n[3] Medico\n[4] Especialidade\n')
         opcao = int(input('Digite sua opção: '))
+        id = input('Digite o id da tabela que deseja alterar: ')
         if opcao == 1:
-            sql1 = 'SELECT * FROM bebes'
+            sql1 = 'SELECT * FROM bebes WHERE id='+id
             sql2 = 'SHOW COLUMNS FROM bebes'
         elif opcao == 2:
-             sql1 = 'SELECT * FROM maes'
+             sql1 = 'SELECT * FROM maes WHERE id='+id
              sql2 = 'SHOW COLUMNS FROM maes'
         elif opcao == 3:
-             sql1 = 'SELECT * FROM medicos'
+             sql1 = 'SELECT * FROM medicos WHERE id='+id
              sql2 = 'SHOW COLUMNS FROM medicos'
         elif opcao == 4:
-             sql1 = 'SELECT * FROM especialidades'
+             sql1 = 'SELECT * FROM especialidades WHERE id='+id
              sql2 = 'SHOW COLUMNS FROM especialidades'
-            
-        cursor.execute(sql1)
-        dados_atuais = cursor.fetchall()
-
-        cursor.execute(sql2)
-        dados = cursor.fetchall()
-        colunas = list()
-        for coluna in range(len(dados)):
-            colunas.append(dados[coluna][0])
-
-        atualizar()
+        
+        atualizar(sql1, sql2, opcao)
 
     elif option == 3:
         print('[1] Bebe\n[2] Mae\n[3] Medico\n[4] Especialidade\n')
